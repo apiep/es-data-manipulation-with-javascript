@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Data Manipulation with Javascript</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Consolas'; }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Data Manipulation with Javascript
+
+---
+class: center, middle
+
+Last month(?) I do a challenge, to restructure a given data.
+
+But without using variable (except function, and it's parameter)
+
+---
+class: center, middle
+
+And got many response
+- No other language? I don't speak Javascript
+- No way! There is no way that possible without variable declaration.
+
+---
+class: center, middle
+
+But, there is still 4 response,
+
+3 submitted and 1 not submitted.
+
+With different "style" to solve the problem
+
+---
+class: left, middle
+
+- 1st: Doing it manually
+- 2nd: Doing it strange way
+- 3rd: Doing it dynamically
+
+---
+
+# 1st:
+## Manually extracting data,
+`[...inventory.inventory1, ...inventory.inventory2]`
+
+Those are the same result as
+```
+array.concat(inventory.inventory1, inventory.inventory2)
+```
+
+There is nothing wrong with it. But, you need to change that code,
+if the data is growing or changed.
+
+---
+
+# 2nd:
+## Using parameter as variable, even though that variable aren't being used for passing data
+
+```javascript
+function something(data, result = '', currentNumber = 0) {
+  result += ''
+  // ...
+}
+something(realData)
+```
+
+This isn't wrong, but why?
+
+---
+
+# 3nd:
+## The "correct" way
+`Object.keys(inventory).map(key => inventory[key])`
+
+This is good, it use object inventory "keys" to iterate each inventory values
+
+---
+class: left, middle
+
+# Javascript method for data manipulation
+
+- `Array.prototype.map`
+- `Array.prototype.filter`
+- `Array.prototype.reduce`
+- `Array.prototype.forEach`
+- `Object.keys`
+- `Object.values`
+- ...
+
+---
+class: center, middle
+
+## Array.prototype.map
+> Changing data for each item of an array
+
+```javascript
+Array<T>.map((item: T) -> any): Array<any>
+```
+
+---
+class: middle
+
+### Example:
+
+```javascript
+const array1 = [1, 2, 3, 4, 5, 6]
+const result1 = array1.map(it => it * 2)
+result1 === [2, 4, 6, 8, 10, 12]
+
+const array2 = [1, 2, 3, 4, 5, 6]
+const result2 = array2.map((it) => {
+  if (it === 3 || it === 6) return null
+  return it * 2
+})
+result2 === [2, 4, null, 8, 10, null]
+```
+
+---
+class: middle, center
+
+## Array.prototype.filter
+> Filter data on array if the given condition are true
+
+```javacript
+Array<T>.filter((item: T) -> boolean): Array<T>
+```
+
+---
+class: middle
+
+### Example:
+
+```javascript
+const array1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+const result1 = array1.filter(it => it % 2 === 0)
+result1 === [2, 4, 6, 8, 10]
+
+const array2 = [1, '2', 3, 4, '5', { name: 'Jacky' }, '45', 11]
+const result2 = array2.filter(it => typeof it === 'number')
+result2 === [1, 3, 4, 11]
+```
+
+---
+class: center, middle
+
+## Array.prototype.reduce
+> Change data structure into something different.
+
+```javascript
+Array<T>.reduce((accumulator: any, item: T) -> any, initialData: any): any
+```
+
+---
+
+### Example:
+
+```javascript
+const array1 = [1, 2, 3, 4, 5]
+const result1 = array1.reduce((accumulator, item) => accumulator + item, 0)
+result1 === 15
+
+const array2 = [1, 2, 3, 4, 5]
+const result2 = array2.reduce((accumulator, item) => {
+  accumulator[item] = {
+    name: `Name ${item}`
+  }
+  return accumulator
+}, {})
+result2 === {
+  1: { name: 'Name 1' },
+  2: { name: 'Name 2' },
+  3: { name: 'Name 3' },
+  4: { name: 'Name 4' },
+  5: { name: 'Name 5' }
+}
+```
+
+---
+class: middle, center
+
+## Array.prototype.forEach
+> Just like `for (i=0;i<j;i++) {}` but without declaring variable
+
+```javascript
+Array<T>.forEach((item: T) -> null): null
+```
+
+---
+class: middle
+
+### Example:
+
+```javascript
+const array = [1, 2, 3, 4, 5]
+array.forEach(it => console.log(it))
+// will print
+1
+2
+3
+4
+5
+```
+
+---
+class: middle, center
+
+## Object.keys
+> Get keys on an object
+
+```javascript
+Object.keys(object: Object): Array<String>
+```
+
+---
+class: middle
+
+### Example:
+```javascript
+const obj1 = {
+  name: 'Afief S',
+  age: 24,
+  job_description: 'Frontend Engineer'
+}
+const result1 = Object.keys(obj1)
+result1 === ['name', 'age', 'job_description']
+
+const obj2 = {
+  1: { name: 'Name 1' },
+  2: { name: 'Name 2' },
+  3: { name: 'Name 3' }
+}
+const result2 = Object.keys(obj2)
+result2 === ['1', '2', '3']
+
+```
+
+---
+class: middle, center
+
+## Object.values
+> The opposite of Object.keys, it will return object values.
+
+```javascript
+Object.values(obj: Object): Array<any>
+```
+
+---
+class: middle
+
+### Example:
+```javascript
+const obj1 = {
+  name: 'Afief S',
+  age: 24,
+  job_description: 'Frontend Engineer'
+}
+const result1 = Object.values(obj1)
+result1 === ['Afief S', 24, 'Frontend Engineer']
+
+const obj2 = {
+  1: { name: 'Name 1' },
+  2: { name: 'Name 2' },
+  3: { name: 'Name 3' }
+}
+const result2 = Object.values(obj2)
+result2 === [
+  { name: 'Name 1' },
+  { name: 'Name 2' },
+  { name: 'Name 3' }
+]
+```
+
+---
+class: center, middle
+
+# Trial
+
+---
+class: middle
+
+Make this code run the correct result.
+```javascript
+// args are array of function argument, in this case [1, 2, 3, 100]
+const sum = (...args) => { /* implement your code */ }
+
+const result = sum(1, 2, 3, 100)
+result === 106
+```
+
+---
+class: middle
+
+```javascript
+const data = [
+  ['Car', 0],
+  ['Smartphone', 2],
+  ['Gorengan', 5],
+  ['Notebook', 1],
+  ['Apple', 1],
+  ['Oranges', 2]
+]
+const getResult = (data) => {
+  // Your logic here
+}
+const result = getResult(data)
+console.log(result)
+// Make it print
+// You have no Car
+// You have 2 Smartphones
+// You have 5 Gorengans
+// You have a Notebook
+// You have an Apple
+// You have 2 Oranges
+```
+
+---
+class: center, middle
+
+# Fin.
+
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
